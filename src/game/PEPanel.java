@@ -29,6 +29,24 @@ public class PEPanel extends JPanel implements ActionListener{
     private static ImageIcon ada2;
     private static ImageIcon ada3;
     private static ImageIcon[] ada;
+    private static ImageIcon grace1;
+    private static ImageIcon grace2;
+    private static ImageIcon grace3;
+    private static ImageIcon[] grace;
+    private static ImageIcon mary1;
+    private static ImageIcon mary2;
+    private static ImageIcon mary3;
+    private static ImageIcon[] mary;
+    private static ImageIcon marg1;
+    private static ImageIcon marg2;
+    private static ImageIcon marg3;
+    private static ImageIcon[] marg;
+    private static ImageIcon meg1;
+    private static ImageIcon meg2;
+    private static ImageIcon meg3;
+    private static ImageIcon[] meg;
+    private static ImageIcon start;
+    private static ImageIcon end;
     
     private static Player player;
     private static Timer timer;
@@ -36,11 +54,12 @@ public class PEPanel extends JPanel implements ActionListener{
     private boolean intro;
     private boolean portal;
     private boolean advance;
+    private boolean showQuestion;
+    private boolean showPortal;
 
     private static JButton[] buttons;
     private static JPanel buttonPanel;
     private static JLabel lives;
-    private JLabel test;
     
     //music
     private File music;
@@ -56,6 +75,8 @@ public class PEPanel extends JPanel implements ActionListener{
         intro = true;
         portal = false;
         advance = true;
+        showQuestion = false;
+        showPortal = false;
         player = new Player();
         
         timer = new Timer(200, this);
@@ -85,9 +106,6 @@ public class PEPanel extends JPanel implements ActionListener{
         
         buttonPanel.setVisible(false);
         
-        test = new JLabel("THIS IS A TEST LOL");
-        add(test, BorderLayout.CENTER);
-        test.setVisible(false);
         lives = new JLabel("Lives: " + player.getLives());
         add(lives, BorderLayout.NORTH);
         
@@ -100,7 +118,7 @@ public class PEPanel extends JPanel implements ActionListener{
     {
         if(k == KeyEvent.VK_ENTER)
         {
-            if(advance)
+            if(intro)
             {
              timer.start();
              nextStage();
@@ -120,6 +138,16 @@ public class PEPanel extends JPanel implements ActionListener{
         if(!intro)
             g.drawImage(stages[stageCount].getFigurePic(), 425, 350, 300, 250, null);
         g.drawImage(player.getImageIcon().getImage(), player.move(400), 430, 150, 150, null);
+        if(showQuestion && !portal)
+        {
+            displayQuestion(g);
+            showQuestion = false;
+        }
+        if(intro)        
+            g.drawImage(start.getImage(), 150, 150, 300, 300, null);
+        
+        if(portal && showPortal)
+            g.drawImage(end.getImage(), 310, 110, 300, 300, null);
     }
     
     public void storePics()
@@ -138,6 +166,36 @@ public class PEPanel extends JPanel implements ActionListener{
         ada[0] = ada1;
         ada[1] = ada2;
         ada[2] = ada3;
+        grace1 = new ImageIcon("src/game/images/Grace1.PNG");
+        grace2 = new ImageIcon("src/game/images/Grace2.PNG");
+        grace3 = new ImageIcon("src/game/images/Grace3.PNG");
+        grace = new ImageIcon[3];
+        grace[0] = grace1;
+        grace[1] = grace2;
+        grace[2] = grace3;
+        mary1= new ImageIcon("src/game/images/Mary1.PNG");
+        mary2 = new ImageIcon("src/game/images/Mary2.PNG");
+        mary3 = new ImageIcon("src/game/images/Mary3.PNG");
+        mary = new ImageIcon[3];
+        mary[0] = mary1;
+        mary[1] = mary2;
+        mary[2] = mary3;
+        marg1= new ImageIcon("src/game/images/Mary1.PNG");
+        marg2 = new ImageIcon("src/game/images/Mary2.PNG");
+        marg3 = new ImageIcon("src/game/images/Mary3.PNG");
+        marg = new ImageIcon[3];
+        marg[0] = marg1;
+        marg[1] = marg2;
+        marg[2] = marg3;
+        meg1= new ImageIcon("src/game/images/Mary1.PNG");
+        meg2 = new ImageIcon("src/game/images/Mary2.PNG");
+        meg3 = new ImageIcon("src/game/images/Mary3.PNG");
+        meg = new ImageIcon[3];
+        meg[0] = meg1;
+        meg[1] = meg2;
+        meg[2] = meg3;
+        start = new ImageIcon("src/game/images/intro.PNG");
+        end = new ImageIcon("src/game/images/congrat.PNG");
     }
     
     public void setupStages() throws FileNotFoundException
@@ -150,7 +208,11 @@ public class PEPanel extends JPanel implements ActionListener{
         }
         stages[6] = new Stage(new ImageIcon("src/game/images/portal_room.PNG"), null, new ImageIcon("src/game/images/guard.PNG"));
         
-        
+        stages[1].setImages(ada);
+        stages[2].setImages(grace);
+        stages[3].setImages(mary);
+        stages[4].setImages(marg);
+        stages[5].setImages(meg);
         
         readQuestions();
         readAnswers();
@@ -250,6 +312,14 @@ public class PEPanel extends JPanel implements ActionListener{
         }
     }
     
+    public void displayQuestion(Graphics g)
+    {
+        Random random = new Random();
+        int index = random.nextInt(3);
+        Image question = stages[stageCount].getImages()[index].getImage();
+        g.drawImage(question, 310, 110, 300, 300, null);
+    }
+    
     public void nextStage()
     {
         stageCount++;
@@ -257,42 +327,31 @@ public class PEPanel extends JPanel implements ActionListener{
             portal = true;
         advance = false;
         intro = false;
+        showQuestion= false;
         player.setDX(0);
         buttonPanel.setVisible(false);
         setButtons(stages[stageCount].getAnswer());
+        timer.start();
         repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) 
     {
-
          if(!player.getMove())
          {
              if(!portal)
+             {
                 buttonPanel.setVisible(true);
+                showQuestion = true;
+                timer.stop();
+                repaint();
+             }
+             else
+                 showPortal = true;
          }
          repaint();
 
-    }
-    
-    public void test()
-    {
-        this.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "interact");
-        this.getActionMap().put("interact", new interact());
-    }
-    
-    private class interact extends AbstractAction {
-
-        @Override
-        public void actionPerformed(ActionEvent e) 
-        {
-            if(advance)
-            {
-             timer.start();
-             nextStage();
-            }
-        }
     }
     
     public class ButtonListener implements ActionListener
@@ -303,7 +362,7 @@ public class PEPanel extends JPanel implements ActionListener{
         {
             // Get question and answer
             JButton button = (JButton)e.getSource();
-            String answer = button.getLabel();
+            String answer = button.getText();
             // Compare answer with correct answer
             String correct = stages[stageCount].getAnswer();
             // Lose life if incorrect

@@ -12,7 +12,7 @@ public class Player {
     public Player() 
     {        
         lives = 3;
-        image = new ImageIcon("src/game/images/player.PNG");
+        image = new ImageIcon("src/game/images/player.png");
         move = true;
         dx = 0;
     }

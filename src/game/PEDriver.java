@@ -20,7 +20,7 @@ public class PEDriver {
         height = 650;
         width = 650;
         frame.setSize(width, height);
-        frame.setLocation(300, 0);
+        frame.setLocation(300,0);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(screen);
         frame.setVisible(true);
@@ -33,8 +33,7 @@ public class PEDriver {
 
         @Override
         public void keyTyped(KeyEvent e) 
-        {
-            
+        {          
         }
 
         @Override
@@ -47,9 +46,6 @@ public class PEDriver {
         @Override
         public void keyReleased(KeyEvent e) 
         {
-
-            //int k = e.getKeyCode();
-            //screen.userInput(k);
         }
         
     }

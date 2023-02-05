@@ -36,11 +36,11 @@ public class Stage {
         this.questions = q;
     }
     
-    public String getQuestion()
+    public String[] getQuestion()
     {
-        Random random = new Random();
-        int index = random.nextInt(3);
-        return questions[index];
+        //Random random = new Random();
+        //int index = random.nextInt(3);
+        return questions;
         
     }
     
@@ -62,5 +62,10 @@ public class Stage {
     public void setImages(ImageIcon[] i)
     {
         this.qImages = i;
+    }
+    
+    public ImageIcon[] getImages()
+    {
+        return qImages;
     }
 }
